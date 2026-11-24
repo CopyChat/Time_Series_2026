@@ -1,0 +1,12 @@
+series,file,n_regions,first,last,rows,nan,below0,min,above1,max,mean_CF_window,mean_CF_common29
+onshore SP277_HH150 RGA,wind_onshore/SP277_HH150_RGA.csv,49,1980-01-01 00:00,2021-12-31 23:00,368184,0,0,-0,0,0.95,0.4177,0.4642
+onshore SP277_HH150 RGB,wind_onshore/SP277_HH150_RGB.csv,49,1980-01-01 00:00,2021-12-31 23:00,368184,0,0,-0,0,0.95,0.359,0.4076
+onshore SP277_HH150 RGC,wind_onshore/SP277_HH150_RGC.csv,49,1980-01-01 00:00,2021-12-31 23:00,368184,0,0,-0,0,0.95,0.2856,0.3362
+onshore existing 2020 fleet,wind_onshore/Existing.csv,45,1980-01-01 00:00,2022-12-31 23:00,376920,0,0,-0,0,0.9,0.2694,0.28
+offshore SP316_HH155 RGB (bottom-fixed),wind_offshore/Future_bottom_fixed/SP316_HH155_RGB.csv,38,1980-01-01 00:00,2021-12-31 23:00,368184,0,0,-0,0,0.95,0.4402,
+offshore existing 2020 fleet,wind_offshore/Existing.csv,14,1980-01-01 00:00,2022-12-31 23:00,376920,0,0,-0,0,0.9,0.4071,
+PV utility no tracking RGA,solar_PV/PV_Utility_scale_no_tracking_RGA.csv,50,1980-01-01 00:00,2021-12-31 23:00,368184,0,9586315,-0.0004,0,1,0.1683,0.1527
+PV utility no tracking RGB,solar_PV/PV_Utility_scale_no_tracking_RGB.csv,50,1980-01-01 00:00,2021-12-31 23:00,368184,0,9538997,-0.0004,0,1,0.161,0.1445
+PV utility no tracking RGC,solar_PV/PV_Utility_scale_no_tracking_RGC.csv,50,1980-01-01 00:00,2021-12-31 23:00,368184,0,9587306,-0.0004,0,1,0.1534,0.1361
+PV utility tracking RGB,solar_PV/PV_Utility_scale_tracking_RGB.csv,50,1980-01-01 00:00,2021-12-31 23:00,368184,0,9460245,-0.0004,0,1,0.1956,0.1765
+PV rooftop RGB,solar_PV/PV_Rooftop_RGB.csv,50,1980-01-01 00:00,2021-12-31 23:00,368184,0,9509028,-0.0003,0,0.9972,0.1254,0.112

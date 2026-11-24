@@ -1,0 +1,5 @@
+case,total_cost_bnEUR,annual_sum_d_lambda_bnEUR,peak_shadow_price_EUR_MWh,fuel_cell_GW,h2_store_TWh,jan_window_bnEUR,jan_window_share,jan_is_event_fixed_threshold,year_max_window_bnEUR,jan_deficit_fixed_caps_TWh,jan_peak_deficit_fixed_caps_GW
+A base,276.821,276.821,90500.010,397.522,166.863,107.947,0.390,True,107.947,75.669,397.522
+B H2 store cost x4,393.654,393.654,52542.522,389.677,137.681,303.702,0.771,True,303.702,75.669,397.522
+C existing backup 60 GW,255.895,275.450,61905.889,342.154,136.758,108.703,0.395,True,108.703,75.669,397.522
+"D same January, weak February",312.765,312.765,90500.010,397.382,307.300,107.529,0.344,True,107.529,75.669,397.522
