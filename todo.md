@@ -24,14 +24,17 @@
 | A15 | ❓ | 11月23日 晨间讨论提出：充裕度目标下以系统层面回测（压缩设计放回完整序列，比较未满足电量、失负荷期望）为主要验收标准，统计指标作诊断；需要 LP 容量扩展模型，与 D1（不跑优化模型）和第 3 节第 4 层冲突。要你定：是否修改 D1；若修改，是否用 Kuepper/Teichgraeber 的 Julia 包或 PyPSA 做单节点最小版 |
 | A16 | ✅ | 已定（研究计划 D16，2026年11月23日）：主干数据用 Balmorel_DTU，时期和年份同 Shubham（天气年 1982–2020，52 周年）；Mopo 作交叉检验。待你确认：事件识别在连续序列上进行、年边界不截断。理由和限制见 [working/2026-11-23 §6](working/2026-11-23_climate_adequacy_tools_validation.md) |
 | A18 | ❓ | 定聚合方法（[working/2026-11-23_aggregation_methods.md §4](working/2026-11-23_aggregation_methods.md)）：建议主体为尾部单列（超过某一重现水平的事件各自作代表事件）+ 其余事件 k-medoids，权重 = 事件数份额；对照组为不单列尾部的 k-medoids、层次聚类、随机抽取、Shubham 的 tsam 周聚类、KKZ 有序选择，可选模拟退火。要你定：是否采用；尾部阈值取几年一遇。附带：问 Shubham 他安装的 tsam 版本 |
-| A17 | ❓ | 要不要把热需求和热泵系数（同一合集 `heat_demand/`、`heat_pump_COP/`）按电气化情景转成电力需求，加到 classic 需求上；不加则事件目录没有“低温+低风”型事件，且气候变化部分没有需求响应（[数据理解 §10](01_data_understanding/data_understanding.html)） |
+| A19 | ❓ | 第 2 层（简化计算）是否升级为充裕度计算：步骤 A 固定系统下聚合前后的失负荷期望之差，步骤 B 按可靠性标准分别设计后回测（研究计划第 3 节"聚合验证：2026年11月26日讨论的发现"第 3 条）；升级后统计量矩阵退为诊断。不需要改 D1（不跑优化模型） |
+| A20 | ❓ | 主情景的固定系统：用第一阶段基线装机（需先拿到，B1），还是继续用 Mopo 2025 年装机缩放的 2–3 档情景；参考供给水平用基线系统能补上的量，还是剩余负荷的分位数（研究计划同节第 4 条） |
+| A17 | ✅ | 电气化负荷计入需求（2026年11月26日你的决定：有数据就计入）。已做：传统用电 + 电转热（热需求曲线 ÷ 热泵性能系数，随气温份额 0.35 由模型 8 个代表周标定）+ 电动汽车，年量和 2050 年装机取自 Shubham 副本的 `MainResults.gdx`；制氢不计（灵活负荷）。结果：缺电最多的 4 年 = Nayak 极端年 1985、2010、1987、1996（[数据理解 §8b、§8c](01_data_understanding/data_understanding.html)） |
+| A21 | ⬜ | 电气化需求的后续：(1) 热侧灵活性（热储存、热电联产、锅炉）与电动汽车智能充电怎样进入剩余负荷；(2) 随气温份额的取值（现为 0.35）是否按区域标定；(3) 按国家算事件，不用全欧铜板 |
 | A12 | ❓ | 11月17日 与 Matti 讨论事件定义（会议准备 Q9–Q13）：供需平衡一类、面向投资问题（D10）、装机情景、参考供给水平、分析类型、电量/气候/经济三类具体问题的取舍；数据定义的事件找不回 SDE 时课题怎样调整 |
 
 ## B. 数据
 
 | # | 状态 | 内容 |
 |---|---|---|
-| B1 | ⬜ | 向 Shubham Nayak 要：39 年输入、39 个单年优化的成本排序、基线的逐年逐区域缺电量、基线各区域各技术的装机（06 §9 D1）；39 个单年优化的逐时影子价格（06 §9 D5） |
+| B1 | ⬜ | 向 Shubham Nayak 要：39 年输入、39 个单年优化的成本排序、基线的逐年逐区域缺电量、基线各区域各技术的装机（06 §9 D1）；39 个单年优化的逐时影子价格（06 §9 D5）。2026年11月26日查本地副本（Paper 3 的工作副本，不是 Nayak 2026 的）：没有明确的第一阶段基线装机；候选是根目录 `MainResults.gdx`（含发电装机 G_CAP_YCRAF、输电容量，2050 模型年，是哪个算例未写明）和 `balmorel/simex/GKACCUMNET.gdx`（传给后续运行的累计装机，2025年3月 Windows 运行，来源不明）。11月26日已读出（conda 环境 `gdx_read`，脚本 [read_mainresults.py](ai_workspace/shubham_capacity/scripts/read_mainresults.py)）：`MainResults.gdx` 为 2050 年、19 国、8 个人工选周（S02…S47）× 24 时步的投资运行，新增陆上风 651 GW、海上风 508 GW、光伏 1625 GW、燃料电池 134 GW、储氢 61.9 TWh；天气年和是否缩放未知；`GKACCUMNET.gdx` 总量不同（光伏 563 GW、风 449 GW），是另一次运行。已在 Gmail 草稿箱写好给 Shubham 的邮件（11月26日，未发送）：问这两个文件的算例、Paper 2 的 1995 基线装机和第二阶段追加装机 |
 | B2 | ⬜ | Grochowicz 2026 的 SDE 清单 `sde_new_store_1941-2021_100bn_12-336h_90_elec_lc1.25_Co2L.csv`：论文的 Data availability 给出中间数据在 Zenodo doi:10.5281/zenodo.20590389，代码在 GitHub `aleks-g/stressed-system` v1.0。先查这两处是否单独提供这个文件；否则向作者要（Zenodo 上的 `results.tar.gz` 约 35 GB） |
 | B7 | 🔄 | CorRES 网站（D13）：open-data 页面已读（11月20日，经 NAS 访问），只有风光数据集，清单见研究计划第 6 节。还要做：问 Matti 用哪一套（Mopo 还是 Balmorel 版，后者与 Shubham 的 Balmorel 一致）；是否申请网络服务的学术账号。DTU 访客 Wi-Fi（dtuguest）连不上 Risø 网段 130.226.56.x，要换网络或用 DTU 账号 |
 | B6 | ⬜ | 下载 de Marco 2025 的 60 个未来气候年能源输入（GitHub ZEN-universe/ZEN-models 分支 Climate-resilience），核对变量、单位和时间范围 |
@@ -75,8 +78,9 @@
 | D16 | ⬜ | Google Scholar 补查回测式验证文献（time series aggregation、resource adequacy、backtesting），判断"极端事件 + 充裕度 + 岛屿"的验证框架是否仍有空间；同时查"Wasserstein / KS 用于聚合保真度"是否已有人做（讨论稿称没找到，未经核实） |
 
 | D17 | ✅ | 五篇 PDF 已挂入 Zotero（2026年11月23日）：Teichgraeber 2019、Kuepper 2022、CapacityExpansion JOSS、Gøtske 2024、Göke 2022 |
+| D20 | ⬜ | 统计量与充裕度/储能需求之间关系的文献（2026年11月26日初查）：Kittel, Roth & Schill 2026（Nature Communications 17:4210，doi:10.1038/s41467-026-72681-5，Crossref 核对；Zotero 中只有 EGU 摘要 GM7Q6WRB，正式版待挂入）补充材料里的干旱强度–储能电量回归要读；Discussion 部分只读了摘要式转述，要逐字核对；Ruhnau & Qvist 2022 全文已读 |
 | D19 | ❓ | 需要你下载：Cannon 2015（J. Climate 28:1260–1267，doi:10.1175/JCLI-D-14-00636.1，付费），读 KKZ 有序选择的算法步骤，作为聚合对照组（A18） |
-| D18 | ❓ | 需要你下载：[Qiu et al. 2026（Nature Energy）](https://doi.org/10.1038/s41560-026-02109-3)，气候变化下的充裕度风险，用来核对笔记第 2 节第 10 点；另需核对 tsam 文档中 `extremePeriodMethod` 选项 |
+| D18 | ❓ | 需要你下载：[Qiu et al. 2026（Nature Energy 11:1449–1458）](https://doi.org/10.1038/s41560-026-02109-3)（无开放获取版；作者单位页 [MIT CS3](https://cs3.mit.edu/publication/118910) 只有摘要），气候变化下的充裕度风险，用来核对笔记第 2 节第 10 点；另需核对 tsam 文档中 `extremePeriodMethod` 选项 |
 
 ## A'. 会上新增的问题
 
