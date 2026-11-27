@@ -2,15 +2,15 @@
 
 2026年11月27日。核验对象：A17（电气化负荷计入需求）的结论"缺电最多的 4 年 = Nayak 极端年 1985、2010、1987、1996"。A17 的结果文件未改动（核验前后 `01_data_understanding/tables/` 的校验和相同）。
 
-- 代码：[verify_extreme_years.py](../../ai_workspace/extreme_year_check/scripts/verify_extreme_years.py)（复用 A17 [adequacy_extremes.py](../../ai_workspace/data_understanding/scripts/adequacy_extremes.py) 的数据加载段，以及 [metrics.py](../../metrics.py) 里的 `storage_unserved`、`rank_most_stressful`、`pearson_r`）；[digitise_nayak_fig8.py](../../ai_workspace/extreme_year_check/scripts/digitise_nayak_fig8.py)
+- 代码：[verify_extreme_years.py](../ai_workspace/extreme_year_check/scripts/verify_extreme_years.py)（复用 A17 [adequacy_extremes.py](../ai_workspace/data_understanding/scripts/adequacy_extremes.py) 的数据加载段，以及 [metrics.py](../metrics.py) 里的 `storage_unserved`、`rank_most_stressful`、`pearson_r`）；[digitise_nayak_fig8.py](../ai_workspace/extreme_year_check/scripts/digitise_nayak_fig8.py)
 - 基准复现：重算的逐年缺供电量（energy not served, ENS）与 A17 年表的最大差 1.4×10⁻¹⁴ TWh
-- 表格：[情形汇总](tables/extreme_year_robustness_1y_copperplate-29reg_1982-2020_BalmorelDTU-MainResults2050_EUR.csv)，[逐年缺供电量](tables/ENS_by_scenario_1y_copperplate-29reg_1982-2020_BalmorelDTU-MainResults2050_EUR.csv)，[输入数据逐年检查](tables/input_qc_1y_29reg_1982-2020_BalmorelDTU_EUR.csv)，[Nayak 图 8 数字化](tables/nayak2026_fig8_annual_LoL_digitised.csv)，[数值 JSON](tables/verification_values.json)
+- 表格：[情形汇总](../ai_workspace/extreme_year_check/tables/extreme_year_robustness_1y_copperplate-29reg_1982-2020_BalmorelDTU-MainResults2050_EUR.csv)，[逐年缺供电量](../ai_workspace/extreme_year_check/tables/ENS_by_scenario_1y_copperplate-29reg_1982-2020_BalmorelDTU-MainResults2050_EUR.csv)，[输入数据逐年检查](../ai_workspace/extreme_year_check/tables/input_qc_1y_29reg_1982-2020_BalmorelDTU_EUR.csv)，[Nayak 图 8 数字化](../ai_workspace/extreme_year_check/tables/nayak2026_fig8_annual_LoL_digitised.csv)，[数值 JSON](../ai_workspace/extreme_year_check/tables/verification_values.json)
 
-![稳健性](figures/extreme_year_robustness_1y_copperplate-29reg_1982-2020_BalmorelDTU-MainResults2050_EUR.png)
+![稳健性](../ai_workspace/extreme_year_check/figures/extreme_year_robustness_1y_copperplate-29reg_1982-2020_BalmorelDTU-MainResults2050_EUR.png)
 
 ## 1. Nayak (2026) 的设置
 
-来源：Nayak et al. 2026 预印本 PDF（[references/](../../references/)）[全文]。
+来源：Nayak et al. 2026 预印本 PDF（[references/](../REFERENCE/)）[全文]。
 
 | 项 | Nayak (2026) | 本项目 A17 | 相同？ |
 |---|---|---|---|
