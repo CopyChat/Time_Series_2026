@@ -255,6 +255,7 @@
 | D16 | 2026年11月23日 | 主干数据用 Balmorel_DTU（需求、水电、风、光，同一套 29 个区域；即 Shubham 使用的数据，文件与在线 DTU 合集一致）。**只借用 Shubham 的时期**：天气年 1982–2020（39 年），不用 2021 年（2020 年延伸到 2021 年 1 月）；**不按 Shubham 的方法处理**：他的 52 周窗口在 7 个年边界丢掉跨年周，本课题的事件识别用连续的逐时序列，不截断年边界。Mopo 风光（1980–2021）降为交叉检验 | Chao |
 | D17 | 2026年11月23日 | 选这套数据的原因是需要需求：这是已找到的唯一与天气年一致、逐时、覆盖多国的电力需求；同一合集还有水电来水和风光，且在同一套区域和同一时期内，并与 Shubham Nayak 的结果直接可比。论文和计划都要写明这个原因。数据的理解见 [01_data_understanding/](01_data_understanding/data_understanding.html) | Chao |
 | D18 | 2026年11月26日 | 电气化负荷有数据就计入需求（todo A17 计入电气化负荷）：电转热由同一合集的热需求曲线和热泵性能系数推出，电动汽车取常数，年量取自 Balmorel 2050 年结果；制氢作灵活负荷不计。依据：只用 classic 需求时 2050 年系统没有缺电，加入后缺电年份与 Nayak 极端年一致（[数据理解 §8b](01_data_understanding/data_understanding.html)） | Chao |
+| D19 | 2026年11月27日 | 当前使用的数据 = [数据理解页](01_data_understanding/data_understanding.html) 分析的 Balmorel_DTU 数据（1982–2020，29 个区域；需求含电气化负荷，按 D18），也是与 Shubham Nayak 结果对比的数据（确认 D16、D17）。Shubham 的调度结果收到后，以他的逐时需求（含电转热、电动汽车）和装机为准，替换本页自己构造的电气化负荷。Grochowicz 2026 的 SDE 输入不同（PyPSA-Eur：atlite 风光与来水、ENTSO-E 负荷按度日法调整、只含电力部门、90 节点、每个天气年单独优化），目前不比较（11月27日 Chao 决定；todo B2 留作可选项，需要用其他数据验证时再下载）（[working/2026-11-27 数据可比性](working/2026-11-27_data_comparability_Shubham_Grochowicz.md)） | Chao |
 
 ## 6. 数据
 

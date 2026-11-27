@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Working Notes</title>
+<style>
+/* Working page: one sheet per section; figures come from presentation/figures and 01_data_understanding/figures */
+:root{
+  --bg:#eef2f4; --sheet:#ffffff; --fg:#13212c; --muted:#4b5c69; --line:#d3dde3;
+  --accent:#0b6a93; --accent-soft:#e3f0f6; --warn:#b06d00; --warn-soft:#fbf0dc;
+  --body:"Source Sans 3","Segoe UI",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e161c; --sheet:#152129; --fg:#e4ecf1; --muted:#a3b4c0; --line:#2c3d48;
+  --accent:#5cb8e0; --accent-soft:#1a3442; --warn:#e8a83e; --warn-soft:#3a2c14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e161c; --sheet:#152129; --fg:#e4ecf1; --muted:#a3b4c0; --line:#2c3d48;
+  --accent:#5cb8e0; --accent-soft:#1a3442; --warn:#e8a83e; --warn-soft:#3a2c14; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.65;margin:0;padding:0 16px 48px}
+main{max-width:1050px;margin:0 auto;display:flex;flex-direction:column;gap:28px;padding-top:24px}
+main>*{min-width:0}
+.page{background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:32px clamp(16px,4vw,48px)}
+h1{font-size:clamp(26px,3.6vw,34px);margin:0 0 6px}
+h2{font-size:24px;margin:0 0 4px}
+h3{font-size:19px;color:var(--accent);margin:26px 0 8px}
+p{margin:8px 0}
+.meta{color:var(--muted);font-size:15px}
+.answer{background:var(--accent-soft);border-radius:6px;padding:14px 18px;margin:12px 0}
+.note{background:var(--warn-soft);border-radius:6px;padding:12px 18px;margin:12px 0;font-size:16px}
+pre{font-family:var(--mono);font-size:14px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;overflow-x:auto;line-height:1.5}
+figure{margin:16px 0}
+figure img{width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:#fff}
+figcaption{font-size:15px;color:var(--muted);margin-top:6px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:640px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600}
+td.num{text-align:right;font-family:var(--mono)}
+.ref{color:var(--muted);font-size:15px}
+ul{padding-left:1.2em}
+li{margin:4px 0}
+</style>
+</head>
+<body>
+<main>
+
+<section class="page">
+<h1>Working page</h1>
+<p class="meta">Project Time_Series_2026 · 27 November 2026 · Data and computations: <a href="../01_data_understanding/data_understanding.html">data-understanding page</a>, Sections 5, 7c, 8b and 8c. The new figure on this page is made by ai_workspace/working_page/scripts/demand_classic_vs_electrification.py</p>
+</section>
+
+<section class="page" id="data">
+<h2>Data characteristics</h2>
+<p class="meta">Characteristics selected from the data-understanding page. Item 1: the two parts of electricity demand.</p>
+
+<h3>1. What the electrification load is</h3>
+<p>The electricity demand in the DTU data set, <code>classic_demand</code>, contains only conventional consumption: the electricity that households, services and industry already use today. It excludes electric heating, electric vehicles, power-to-X and hydrogen production [Kruse 2023 §4.1]. It is a regression on temperature, weekday, holidays, daylight hours and hour of day, and it is a deterministic central estimate [Kruse 2023 §6.1.2].</p>
+<p>The <b>electrification load</b> is the energy use that is met by fuels today (gas, oil, petrol, diesel) and that a decarbonised scenario moves onto electricity. It becomes new electricity consumption:</p>
+<ul>
+<li><b>Electricity for heat</b>: the electricity that heat pumps and electric boilers use for building and district heating. Heat-pump electricity = heat supplied ÷ coefficient of performance (COP). Heat demand is high in winter and the COP is low in winter (air-source heat pumps: about 3.1 in January, 4.8 in July), so both raise winter consumption.</li>
+<li><b>Electric vehicles</b>: transport fuel replaced by electricity. It varies by only 1.5% across the 8 representative weeks of the Balmorel results, so it is taken as constant here.</li>
+<li><b>Hydrogen (electrolysis)</b>: 2218 TWh yr⁻¹ in the Balmorel results. Electrolysers run flexibly with the electricity price, so this load is not counted in the demand here.</li>
+</ul>
+<p>Why it exists: in a 2050 net-zero scenario, heating and transport fuels are replaced by electricity. This consumption is absent from today's measured load, and therefore also from the classic regression model (fitted to ENTSO-E load of 2015–2018). Its annual amounts come from an energy-system model (Balmorel <code>MainResults.gdx</code> in Shubham's working copy, model year 2050). Its hourly shapes come from the heat-demand profiles and COP series of the same DTU collection.</p>
+
+<div class="note"><b>Naming.</b> Section 8b of the data-understanding page calls the sum "conventional + electricity for heat + electric vehicles" the "electrified demand", which is easily confused with the added part. From this page on: <b>electrification load</b> = electricity for heat + electric vehicles (the added part); <b>total demand</b> = conventional demand + electrification load. The names on the data-understanding page have not been changed yet.</div>
+
+<h3>2. The electrification load also consumes electricity: total demand = conventional + electrification load</h3>
+<p>Yes. Electricity for heat and electric vehicles both draw power from the grid. Added to the conventional demand they form the demand the system must serve; residual load and unserved energy are computed from total demand (data-understanding page, Section 8b).</p>
+<pre>total demand(t)          = conventional(t) + electricity for heat(t) + electric vehicles(t)
+conventional(t)          = classic profile(t) × Balmorel conventional annual energy ÷ classic annual energy   (per region)
+electricity for heat(t)  = Balmorel electricity-for-heat annual energy × shape(t) ÷ 39-year mean of shape
+shape(t)                 = [ 0.35 × heating profile(t) ÷ mean heating profile + 0.65 ] ÷ COP(t)
+electric vehicles(t)     = Balmorel EV annual energy ÷ 8766 h
+residual load(t)         = total demand(t) − wind(t) − PV(t) − run-of-river inflow(t)</pre>
+<p>Here the classic profile only gives the <b>shape</b> of conventional demand: its annual energy of 2502 TWh is scaled to the Balmorel 2050 conventional demand of 3048 TWh (factor 1.22). The temperature-dependent share of 0.35 was obtained by matching the shape to the electricity-for-heat use in the model's 8 representative weeks (data-understanding page, Fig. 10b).</p>
+
+<h3>3. Which is larger</h3>
+<div class="answer">Over a year the electrification load is slightly larger than conventional demand: (1954 + 1504) ÷ 3048 = <b>1.13</b>. The ratio depends strongly on season: 1.46 in January, when the electrification load is 59% of total demand, and 0.86 in July, when conventional demand is larger. The difference comes from electricity for heat: 351 GW on average in January, 126 GW in July, whereas conventional demand stays between 332 and 359 GW all year.</div>
+<figure>
+<img src="figures/demand_classic_vs_electrification_1d_29reg_1982-2020_BalmorelDTU-MainResults2050_EUR.png" alt="Annual energy and monthly mean power of conventional demand and electrification load">
+<figcaption>Figure 1. Conventional demand and electrification load (sum of 29 Balmorel regions; annual amounts from the Balmorel 2050 model results, hourly shapes from the DTU data 1982–2020). (a) Annual electricity: the classic data as delivered (unit inferred as MW), the total 2050 demand counted here, and hydrogen (not counted); (b) composition of monthly mean power, black line = total demand.</figcaption>
+</figure>
+
+<h3>4. Which demand Nayak et al. (2026) use</h3>
+<div class="tablewrap"><table>
+<tr><th>Component</th><th>Nayak et al. 2026</th><th>This page (data-understanding page, Section 8b)</th></tr>
+<tr><td>Conventional</td><td>Classic demand, exogenous, derived from ERA5 temperature (Kruse 2023) [Nayak §2.1.2]</td><td>Classic shape × Balmorel 2050 annual energy</td></tr>
+<tr><td>Electricity for heat</td><td>Heat demand exogenous (degree-day profiles scaled to the annual heat demand of the Balmorel scenario); supplied by heat pumps, CHP, boilers and heat storage optimised in the model, so heat-pump and electric-boiler electricity is a model result; COP varies with temperature [Nayak §2.1.2, §3]</td><td>Annual amount from the Balmorel results; shape = heating profile ÷ COP (share 0.35, calibrated); no heat storage or CHP flexibility</td></tr>
+<tr><td>Electric vehicles, hydrogen</td><td>Endogenous consumption categories in the model results (category names ENDO_EV and ENDO_H2 in <code>MainResults.gdx</code>; not described in the paper text)</td><td>EVs constant; hydrogen not counted</td></tr>
+<tr><td>Representative days and scaling</td><td>Representative days chosen by a fixed calendar (8 weeks × Thursday to Saturday), not selected from demand; after selection all weather-dependent inputs, including classic demand, are quantile-mapped [Nayak §2.2, §3]</td><td>No representative days; all 39 years of hourly data</td></tr>
+</table></div>
+<p>Nayak's total demand is therefore also "conventional + electrification load", but there the electrification load is an optimisation result that heat storage, CHP and flexible electrolysis can shift in time, whereas on this page it is a fixed profile. This is one of the main reasons why the unserved energy here (40.7 TWh yr⁻¹ on average) is far above the paper's (about 5 TWh in the worst year, read from the paper's Fig. 8) [inference].</p>
+
+<h3>5. Why this matters for the study</h3>
+<ul>
+<li><b>The sources of variance change.</b> With classic demand only, 76% of the variance of daily demand comes from the weekday effect, 18% from the season and 6% from the remainder; with the electrification load, the season explains 77%, the weekday 6% and the remainder 17% (data-understanding page, Fig. 0b).</li>
+<li><b>Cold days coincide with low wind.</b> Correlation between winter daily demand and wind capacity factor: classic −0.02, total demand −0.45 (n = 3520 days).</li>
+<li><b>No unserved energy without electrification load.</b> With conventional demand only, the maximum residual load is 257 GW, below the 290 GW of dispatchable capacity, so no hour in 39 years has unserved energy. With the electrification load, 10.3% of hours exceed dispatchable capacity, and the 4 years with the most unserved energy (1985, 2010, 1987, 1996) are the 4 extreme years of Nayak et al.</li>
+</ul>
+<figure>
+<img src="../01_data_understanding/figures/adequacy_demand_electrified.png" alt="Composition, calibration, interannual anomalies of electrified demand and its relation to wind">
+<figcaption>Figure 2 (data-understanding page, Fig. 10). (a) Composition of monthly mean demand, dashed line = level of the classic data as delivered; (b) calibration of the electricity-for-heat shape; (c) annual demand anomalies; (d) winter daily mean demand against wind capacity factor.</figcaption>
+</figure>
+
+<div class="note"><b>Not verified.</b> (1) The Balmorel annual amounts come from <code>MainResults.gdx</code> in Shubham's working copy; whether this is the paper's 1995 baseline system is unknown (todo B1). (2) The unit of the classic data is inferred as MW; after scaling it does not affect the results. (3) Leaving hydrogen out of the demand is an assumption of this page.</div>
+
+<p class="ref">References: Kruse 2023, MSc thesis §4.1, §4.2, §6.1.2 [Chapter 4 and §6.1 read]; Nayak et al. 2026, SSRN preprint [full text]; Nayak, Koivisto, Kanellas 2025, DTU Data doi:10.11583/DTU.c.7964141.</p>
+</section>
+
+</main>
+</body>
+</html>
